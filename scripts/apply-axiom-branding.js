@@ -131,6 +131,10 @@ const HOME_SCRIPT =
   '<script src="PATH_PREFIXassets/js/axiom-home.js" defer></script>';
 const ACCORDION_SCRIPT =
   '<script src="PATH_PREFIXassets/js/axiom-accordion.js" defer></script>';
+const PAGE_LOADER_INLINE =
+  '<script>(function(){if(sessionStorage.getItem("axiom-page-loading")==="1")document.documentElement.classList.add("axiom-page-loading");})();</script>';
+const PAGE_LOADER_SCRIPT =
+  '<script src="PATH_PREFIXassets/js/axiom-page-loader.js" defer></script>';
 
 function walk(dir, files = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -243,6 +247,18 @@ for (const file of walk(ROOT)) {
   if (!html.includes('axiom-overrides.css')) {
     const inject = HEAD_INJECT.replace(/PATH_PREFIX/g, prefix);
     html = html.replace(/<head>/i, `<head>${inject}`);
+  }
+
+  if (!html.includes('axiom-page-loader.js')) {
+    const inject = PAGE_LOADER_SCRIPT.replace(/PATH_PREFIX/g, prefix);
+    html = html.replace(/<\/body>/i, `${inject}</body>`);
+  }
+
+  if (
+    !html.includes('sessionStorage.getItem("axiom-page-loading")') &&
+    html.includes(THEME_INLINE)
+  ) {
+    html = html.replace(THEME_INLINE, THEME_INLINE + PAGE_LOADER_INLINE);
   }
 
   if (!html.includes('axiom-theme.js')) {

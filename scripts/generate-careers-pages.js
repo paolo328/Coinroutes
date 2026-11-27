@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const APPLY_EMAIL = 'lazare.kasradze@axiom-net.io';
 
 const JOBS = [
   {
@@ -127,13 +126,8 @@ function jobListSection(prefix) {
     '<h2 class="mb-3 text-[clamp(22px,3.5vw,44px)] font-extrabold tracking-[-0.5px]">Current opportunities.</h2>' +
     '<p class="text-sm font-semibold leading-relaxed text-foreground-50 md:text-base">We are growing our engineering team with senior talent across blockchain and fintech. All roles listed below are remote within the US or EU.</p>' +
     '</div>' +
-    '<div class="axiom-careers-layout">' +
     `<div class="axiom-careers-grid">${cards}</div>` +
-    '<aside class="axiom-careers-enquiries">' +
-    '<p class="section-label mb-3">General enquiries</p>' +
-    '<p class="text-sm font-medium leading-relaxed text-foreground-50 md:text-base">Don\'t see the right role? Send your CV and a short note about what you\'d like to work on to ' +
-    `<a class="font-mono font-semibold text-theme-accent underline underline-offset-4" href="mailto:${APPLY_EMAIL}">${APPLY_EMAIL}</a>.</p>` +
-    '</aside></div></div></section>'
+    '</div></section>'
   );
 }
 
@@ -142,19 +136,6 @@ function listSection(title, items) {
     `<div class="axiom-job-detail__section"><h2>${esc(title)}</h2><ul>` +
     items.map((item) => `<li>${esc(item)}</li>`).join('') +
     '</ul></div>'
-  );
-}
-
-function applyBlock(extra, subject) {
-  const subj = encodeURIComponent(subject || 'Application — Coinroutes');
-  return (
-    '<div class="axiom-job-apply">' +
-    '<h2>How to Apply</h2>' +
-    `<p>${esc(extra || 'Please send your CV along with portfolio links or examples of relevant work.')}</p>` +
-    `<a data-slot="button" data-variant="default" data-size="default" class="group/button inline-flex cursor-pointer items-center justify-center font-accent font-medium transition-[color,background-color,border-color] duration-300 whitespace-nowrap select-none bg-theme-accent text-surface border border-transparent hover:border-theme-accent/30 dark:text-primary h-12 px-6 text-base" href="mailto:${APPLY_EMAIL}?subject=${subj}">` +
-    `Email ${APPLY_EMAIL}` +
-    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right ml-2 size-4 transition-transform duration-300 group-hover/button:translate-x-1" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>' +
-    '</div>'
   );
 }
 
@@ -202,10 +183,6 @@ function blockchainJobContent() {
       'Career growth opportunities.',
       'A friendly, supportive, and collaborative engineering team.',
     ]) +
-    applyBlock(
-      'Please send your CV along with portfolio links or examples of relevant smart contract and DeFi work.',
-      'Application — Blockchain Developer / Smart Contract Engineer'
-    ) +
     '</div></div></section>'
   );
 }
@@ -230,10 +207,6 @@ function tradingJobContent() {
       'Write and maintain tests for critical backend and trading workflows.',
       'Collaborate closely with the team to deliver secure, reliable, and user-friendly features.',
     ]) +
-    applyBlock(
-      'Please send your CV along with portfolio links or examples of relevant work, especially any experience with trading, fintech, or financial platforms.',
-      'Application — FullStack Developer – Trading Platform'
-    ) +
     '</div></div></section>'
   );
 }

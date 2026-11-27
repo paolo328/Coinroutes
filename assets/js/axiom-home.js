@@ -273,77 +273,30 @@
     if (items.length < 2) return;
 
     items.forEach(function (li) {
+      li.hidden = false;
+      li.removeAttribute('hidden');
+      li.classList.remove('axiom-process-tabs__panel', 'is-active', 'is-leaving');
       li.querySelectorAll('[class*="md:grid-cols-2"]').forEach(function (el) {
         el.classList.remove('hidden');
       });
     });
 
-    if (!window.matchMedia('(min-width: 1024px)').matches) return;
-
-    var ol = items[0].parentElement;
-    var shell = document.createElement('div');
-    shell.className = 'axiom-process-tabs';
-
-    var nav = document.createElement('div');
-    nav.className = 'axiom-process-tabs__nav';
-    nav.setAttribute('role', 'tablist');
-    nav.setAttribute('aria-orientation', 'vertical');
-
-    var content = document.createElement('div');
-    content.className = 'axiom-process-tabs__content';
-
-    function activateProcess(activeIdx) {
-      nav.querySelectorAll('.axiom-process-tabs__step').forEach(function (b, i) {
-        b.classList.toggle('is-active', i === activeIdx);
-        b.setAttribute('aria-selected', i === activeIdx ? 'true' : 'false');
+    section.querySelectorAll('.axiom-process-tabs').forEach(function (shell) {
+      var content = shell.querySelector('.axiom-process-tabs__content');
+      var nav = shell.querySelector('.axiom-process-tabs__nav');
+      if (!content) return;
+      var panels = content.querySelectorAll('.axiom-process-tabs__panel');
+      var ol = document.createElement('ol');
+      ol.className = 'flex flex-col gap-12';
+      panels.forEach(function (panel) {
+        panel.hidden = false;
+        panel.removeAttribute('hidden');
+        panel.classList.remove('axiom-process-tabs__panel', 'is-active', 'is-leaving');
+        ol.appendChild(panel);
       });
-      content.querySelectorAll('.axiom-process-tabs__panel').forEach(function (p, i) {
-        if (i === activeIdx) {
-          p.hidden = false;
-          p.classList.add('is-active');
-          p.classList.remove('is-leaving');
-        } else if (!p.hidden) {
-          p.classList.add('is-leaving');
-          p.classList.remove('is-active');
-          window.setTimeout(function () {
-            if (!p.classList.contains('is-active')) {
-              p.hidden = true;
-              p.classList.remove('is-leaving');
-            }
-          }, 320);
-        } else {
-          p.hidden = true;
-          p.classList.remove('is-active', 'is-leaving');
-        }
-      });
-    }
-
-    items.forEach(function (li, index) {
-      var num = li.querySelector('.font-mono');
-      var heading = li.querySelector('h3');
-      var label = (num ? num.textContent.trim() + ' ' : '') + (heading ? heading.textContent.trim() : 'Step');
-
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'axiom-process-tabs__step';
-      btn.setAttribute('role', 'tab');
-      btn.textContent = label;
-      btn.addEventListener('click', function () {
-        activateProcess(index);
-      });
-      nav.appendChild(btn);
-
-      li.classList.add('axiom-process-tabs__panel');
-      li.setAttribute('role', 'tabpanel');
-      content.appendChild(li);
-
-      if (index === 0) btn.classList.add('is-active');
-      if (index !== 0) li.hidden = true;
+      shell.replaceWith(ol);
+      if (nav) nav.remove();
     });
-
-    shell.appendChild(nav);
-    shell.appendChild(content);
-    ol.replaceWith(shell);
   }
 
   function initServices(section) {
